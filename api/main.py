@@ -3,6 +3,11 @@ from pydantic import BaseModel
 from models.models import Categorias, Nominados, Votaciones
 from db import session
 
+import sys
+import os
+
+sys.path.append(os.path.dirname(os.path.abspath(__file__)))
+
 # Modelo de entrada para validar la solicitud
 class VotacionCreate(BaseModel):
     nombre_elector: str
