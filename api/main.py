@@ -1,6 +1,6 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
-from models import Categorias, Nominados, Votaciones
+from api.models.models import Categorias, Nominados, Votaciones
 from db import session
 
 import sys
