@@ -1,6 +1,6 @@
 from sqlalchemy import Boolean, Column, Integer, String, Text, ForeignKey
 from sqlalchemy.orm import declarative_base, relationship
-from db import engine
+from api.db import engine
 
 Base = declarative_base()
 
