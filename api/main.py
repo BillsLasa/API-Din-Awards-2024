@@ -56,6 +56,19 @@ def obtener_nominados_por_categoria(categoria_id: int):
         for nominado in nominados]
     }
 
+@app.get("/patrocinadores/")
+def obtener_patrocinadores():
+    patrocinadores = session.query(Patrocinadores).order_by(Patrocinadores.id).all()
+    return {
+        "nominados": [
+            {
+                "id": patrocinador.id, 
+                "nombre": patrocinador.nombre, 
+                "representacion": patrocinador.representacion
+            } 
+        for patrocinador in patrocinadores]
+    }
+
 @app.post("/votaciones/")
 def crear_votacion(votacion: VotacionCreate):
     nueva_votacion = Votaciones(
