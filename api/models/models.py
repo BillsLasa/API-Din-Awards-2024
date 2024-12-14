@@ -24,4 +24,11 @@ class Votaciones(Base):
     nominado_id = Column(Integer, ForeignKey("nominados.id"), nullable=False)
     voto_valido = Column(Boolean, default=True)
 
+class Patrocinadores(Base):
+    __tablename__ = "votaciones"
+
+    id = Column(Integer, primary_key=True)
+    nombre = Column(String(1000), nullable=False)
+    representacion = Column(Text, nullable=True) 
+
 Base.metadata.create_all(engine)
