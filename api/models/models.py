@@ -25,7 +25,7 @@ class Votaciones(Base):
     voto_valido = Column(Boolean, default=True)
 
 class Patrocinadores(Base):
-    __tablename__ = "votaciones"
+    __tablename__ = "patrocinadores"
 
     id = Column(Integer, primary_key=True)
     nombre = Column(String(1000), nullable=False)
