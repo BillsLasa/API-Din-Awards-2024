@@ -5,14 +5,14 @@ from api.db import session
 
 import sys
 import os
-from typing import Dict
+from typing import List
 
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 # Modelo de entrada para validar la solicitud
 class VotacionCreate(BaseModel):
     nombre_elector: str
-    categorias: Dict[int, int]  # clave: categoria_id, valor: nominado_id
+    nominados: List[int]  # Lista de nominados_id
 
 app = FastAPI()
 
@@ -72,15 +72,15 @@ def obtener_patrocinadores():
 @app.post("/votaciones/")
 def crear_votacion(votacion: VotacionCreate):
     try:
-        # Crear una votación por cada categoría y nominado
-        for categoria_id, nominado_id in votacion.categorias.items():
+        # Crear una votación para cada nominado_id en la lista
+        for nominado_id in votacion.nominados:
             nueva_votacion = Votaciones(
                 nombre_elector=votacion.nombre_elector,
                 nominado_id=nominado_id,
             )
             session.add(nueva_votacion)
         
-        # Confirmar todos los cambios en la base de datos
+        # Confirmar los cambios en la base de datos
         session.commit()
     except Exception as e:
         session.rollback()
