@@ -11,8 +11,7 @@ sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 # Modelo de entrada para validar la solicitud
 class VotacionCreate(BaseModel):
     nombre_elector: str
-    nominado_id: int
-    voto_valido: bool = True
+    categorias: Dict[int, int]  # clave: categoria_id, valor: nominado_id
 
 app = FastAPI()
 
@@ -71,17 +70,19 @@ def obtener_patrocinadores():
 
 @app.post("/votaciones/")
 def crear_votacion(votacion: VotacionCreate):
-    nueva_votacion = Votaciones(
-        nombre_elector=votacion.nombre_elector,
-        nominado_id=votacion.nominado_id,
-        voto_valido=votacion.voto_valido
-    )
-
     try:
-        session.add(nueva_votacion)
+        # Crear una votación por cada categoría y nominado
+        for categoria_id, nominado_id in votacion.categorias.items():
+            nueva_votacion = Votaciones(
+                nombre_elector=votacion.nombre_elector,
+                nominado_id=nominado_id,
+            )
+            session.add(nueva_votacion)
+        
+        # Confirmar todos los cambios en la base de datos
         session.commit()
     except Exception as e:
         session.rollback()
-        raise HTTPException(status_code=500, detail=f"Error al guardar la votación: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Error al guardar las votaciones: {str(e)}")
 
-    return {"message": "Votación creada con éxito", "id": nueva_votacion.id}
+    return {"message": "Votaciones creadas con éxito"}
