@@ -1,4 +1,5 @@
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from api.models.models import Categorias, Nominados, Votaciones, Patrocinadores
 from api.db import session
@@ -15,6 +16,15 @@ class VotacionCreate(BaseModel):
     nominados: List[int]  # Lista de nominados_id
 
 app = FastAPI()
+
+# Configuración de CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Permite cualquier origen (en producción, especifica dominios permitidos)
+    allow_credentials=True,
+    allow_methods=["*"],  # Permite todos los métodos HTTP
+    allow_headers=["*"],  # Permite todos los encabezados
+)
 
 @app.get("/categorias/")
 def obtener_categorias():
